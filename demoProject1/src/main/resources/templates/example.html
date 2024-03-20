@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정적 자원 연결</title>
+    <!-- static 폴더를 기준으로 css파일 경로를 작성. static=제일 앞 "/" -->
+    <link rel="stylesheet" href="/css/ex.css">
+</head>
+<body>
+    <div class = "container">
+    <h1>정적 자원(JS, CSS, image) 연결</h1>
+
+    <!-- static 폴더를 기준으로 image 파일 경로를 작성. -->
+    <img src="images/dogs/dog1.jpg">
+    <img src="images/dogs/dog2.jpg">
+    <img src="images/dogs/dog3.jpg">
+    <img src="images/dogs/dog4.jpg">
+    <img src="images/dogs/dog5.jpg">
+
+    <button id ="btn">JS 연결 테스트</button>
+    </div>
+
+    <!-- static 폴더를 기준으로 js 파일 경로를 작성 -->
+    <script src="/js/ex.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.container{
+    width: 50vw;
+    height : 400px;
+    margin : auto;
+    background-color: yellow;
+    border : 1px solid black;
+    text-align : center;
+}
+
+.container img{
+    width: 19%;
+    height: auto;
+}
