@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타임리프 예제 5</title>
+    <style>
+
+        .red{color : red;}
+        .green{color : green;}
+        .deco{text-decoration: underline;}
+ 
+    </style>
+</head>
+<body>
+    <h1>타임리프 예제 5</h1>
+
+    <h3> th:inline = "javascript" 속성 작성</h3>
+    
+    <pre>
+        - script 태그에 작성하는 속성
+        - 타임리프 문법으로 출력된 내용/값을 JS에 알맞은 타입으로 변환
+    </pre>
+
+    <h3 id="message"> 
+    </h3>
+
+    <h3 id="num1"></h3>
+
+    <hr>
+
+    <h3>th:classappend 속성 : 요소에 class속성값을 동적으로 추가</h3>
+
+    <h4 th:classappend="red">th:classappend RED 테스트중</h4>
+    <h4 class="green" th:classappend = "deco">th:classappend GREEN + DECO 테스트중</h4>
+    <!-- 개발자도구에서는 class = "green deco"로 해석함 -->
+    <h4 th:classappend="${num1 lt 10000}? green:red">num1이 10000보다 작으면 green 아니면 red</h4>
+   
+    <!-- lt = '<' / gt = '>' -->
+
+
+
+    <hr>
+    <h3>안전 탐색 ${객체?.필드}</h3>
+    <pre>
+        - 객체가 null인지 판단 후 null이 아닌 경우 수행시킴
+    </pre>
+
+    <!-- <h4 th:text="${std.studentNo}">학번</h4> -->
+    <!-- 그냥 쓰면 std의 studentNo가 null이기 때문에 오류가 발생 -->
+
+    <h4 th:text="${std?.studentNo}">학번</h4>
+    <!-- null인 경우 출력안되게만 하고 정상 실행 -->
+
+
+    <hr>
+
+    <h3>${#numbers.sequence(시작,끝[,step])} 번호 발생기 </h3>
+
+    <pre>
+        - 시작부터 끝까지 번호로만 이루어진 숫자 배열을 생성
+        
+        ex) ${#numbers.sequence(1,5)} => {1,2,3,4,5}
+
+        [왜 사용할까?]
+        - 타임리프 반복문 th:each는 향상된 for문으로
+        일반 for문의 동작(시작부터 끝까지 일정 수만큼 증/감)을 할 수 없음
+
+
+        1부터 15까지 2씩 증가하는 증가식 만들기
+        
+        <ul>
+            <li th:each="i : ${#numbers.sequence(1,15,2)}" th:text="|테스트 ${i}|"></li>
+            <!-- 단, 일반 for문처럼 -를 할 수 없고 무조건 증가만 됨 -->
+        </ul>
+    </pre>
+
+
+
+
+    <script th:inline="javascript">
+
+        // JS inline - Natural Template
+
+        /* HTML 파일 독립 실행시(=html 파일 직접 실행으로 진입시)
+        JS 내부 타임리프 코드 오류를 발생하지 않게 함 
+        + HTML 파일에서 발생하는 문법 오류 해결*/
+
+        
+        const message = /*[[${message}]]*/ "message";
+        const num1 = /*[[${num1}]]*/ 100;
+
+        // 범위 주석 사용시 띄어쓰기 삽입 주의(넣으면 안됨)
+
+        // 독립 실행시 : 주석친 부분이 아닌 값이 출력
+        // 서버를 통한 웹요청 실행시 : 그대로 출력
+
+        /* ex5 페이지의 console에 message, num1를 입력하면 할당된 값이 출력됨 
+        th:inline="javascript"하지 않으면 문자열과 int를 구별하여 입력해야됨 */
+        document.querySelector("#message").innerText = message;
+        document.querySelector("#num1").innerText = num1;
+    </script>
+</body>
+</html>

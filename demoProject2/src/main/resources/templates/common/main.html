@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,7 +58,25 @@
             <a href="/example/ex4">타임 리프 예제 4</a>
         </li>
 
+        <li>
+            <a href="/example/ex5">타임리프 예제 5</a>
+        </li>
 
     </ol>
+    <hr>
+    <h3>fragments/temp.html 중 th:fragment="temp1" 이라는 이름의 조각 추가하기</h3>
+
+    <!-- controller에서 forward시 타임리프가 제공하는 접두사, 접미사를 제외한 경로를 작성 -->
+
+    <!-- temp.html 파일의 temp1이라는 이름의 조각을 재사용 -->
+    <th:block th:replace="~{fragments/temp :: temp1}"></th:block>
+
+    <!-- temp.html 파일의 temp2이라는 이름의 조각을 재사용 -->
+    <th:block th:replace="~{fragments/temp :: temp2}"></th:block>
+
+    <!-- footer.html 파일 전체를 하나의 조각으로 취급하고 재사용하기 -->
+    <th:block th:replace="~{fragments/footer}"></th:block>
+    
+    <!-- <th:block th:replace="~{templates/example/ex1}"></th:block> -->
 </body>
 </html>

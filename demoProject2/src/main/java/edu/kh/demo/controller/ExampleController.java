@@ -89,7 +89,8 @@ public class ExampleController {
 	@PostMapping("ex2") // /example/ex2 POST 방식 매핑
 	public String ex2(Model model) {
 		
-		// Model : 데이터 전달용 객체(request scope)
+		// Model : 데이터 전달용 객체(request scope), Spring에서 값 전달 역할을 하는 객체.
+		//        기본적으로 request scope + session으로 확장 가능
 		
 		model.addAttribute("str","<h1>테스트 중 &times;</h1>");
 		
@@ -123,7 +124,7 @@ public class ExampleController {
 	@GetMapping("ex2/{number}")
 	public String pathVariableTest(
 			@PathVariable("number") int number) 
-		// 주소 중 {number} 부분의 값을 가져와 매개변수ㅜ에 저장
+		// 주소 중 {number} 부분의 값을 가져와 매개변수에 저장
 		// + requestScope 세팅
 	{
 		log.debug("number : " + number);
@@ -143,5 +144,19 @@ public class ExampleController {
 		model.addAttribute("num",100);
 		
 		return "example/ex4";
+	}
+	
+	
+	
+	@GetMapping("ex5")
+	public String ex5 (Model model) {
+		
+		model.addAttribute("message","타임리프 + JavaScript 사용 연습");
+		model.addAttribute("num1",12345);
+		
+		Student std = new Student();
+		std.setStudentNo("45678");
+		model.addAttribute("std",std);
+		return "example/ex5";
 	}
 }
