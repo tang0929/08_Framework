@@ -17,5 +17,5 @@ public class Todo {
 	private String todoTitle; // 할 일 일의 제목
 	private String todoContent;  // 할 일 내용
 	private String complete; // 할 일 완료 여부("Y","N")
-	private String regDate; // 할 일 등록일(String으로 변환
+	private String regDate; // 할 일 등록일(String으로 변환)
 }

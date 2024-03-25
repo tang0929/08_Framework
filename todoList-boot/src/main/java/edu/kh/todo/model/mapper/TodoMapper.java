@@ -47,6 +47,53 @@ public interface TodoMapper {
 	int addTodo(Todo todo);
 
 
+	/**
+	 * 할 일 상세 조회
+	 * @param todoNo
+	 * @return todo
+	 */
+	Todo todoDetail(int todoNo);
+
+
+	
+	/**
+	 * 
+	 * @param todoNo
+	 * @return
+	 */
+	int deleteTodo(int todoNo);
+
+	
+	
+
+	/**
+	 * 할 일 수정
+	 * @param todo
+	 * @return
+	 */
+	int todoUpdate(Todo todo);
+
+
+	/**
+	 * 완료 여부 수정
+	 * @param todo
+	 * @return
+	 */
+	int changeComplete(Todo todo);
+
+
+	
+	/**
+	 * 전체 할 일 개수 
+	 * @return
+	 */
+	int getTotalCount();
+
+	
+
+
+
+
 
 
 
