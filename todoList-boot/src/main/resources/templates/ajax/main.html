@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TodoList - Ajax</title>
+  <link rel="stylesheet" href="/css/ajax-main.css">
 </head>
 <body>
   <h1>Todo List - Ajax 버전</h1>
@@ -34,7 +35,7 @@
     전체 Todo 개수 : <span id="totalCount">0</span> 개
     /
     완료된 Todo 개수 : <span id="completeCount">0</span> 개
-    <button id="reloadBtn" style = "background-color: rgb(250, 250, 117); border-radius:10pt;">새로고침</button>
+    <button id="reloadBtn" style = "background-color: rgb(250, 250, 117); height:30px; width:120px;">새로고침</button>
   </h3>
             
 
@@ -48,10 +49,49 @@
     </thead>
 
 
-    <tbody>
+    <tbody id = "tbody">
       
     </tbody>
   </table>
+
+
+<!-- 할 일 상세 조회 시 출력되는 화면  
+popup layer : 현재 페이지 위에 새로운 레이어를 띄움-->
+<div id="popupLayer" class="popup-hidden">
+  <div class="popupLayerTitle">
+   상세 조회
+  </div>
+  <div class="popup-row">
+    번호 : <span id="popupTodoNo"></span>
+    |
+    제목 : <span id ="popupTodoTitle"></span>
+
+    <span id="popupClose">&times;</span> 
+  </div>
+  <div class="popup-row">
+    완료 여부 : <span id = "popupComplete"></span>
+    |
+    등록일 : <span id = "popupRegDate"></span>
+  </div>
+  <div class="popup-row">
+    [내용]
+    <div id = "popupTodoContent"></div>
+  </div>
+  <div class="btn-container">
+    <button id="changeComplete">완료 여부 변경하기</button>
+    <button id ="updateView">수정하기</button>
+    <button id="deleteBtn">삭제하기</button>
+  </div>
+</div>
+
+  <div id="updateLayer" class="popup-hidden">
+    <div class="updateLayerTitle">수정 화면</div>
+    <div class="popup-row">제목 : <input type="text" id="updateTitle"></div>
+    <div class="popup-row"><textarea id="updateContent" cols="50" rows="5"></textarea></div>
+    <div class="btn-container"><button id = "updateBtn">수정하기</button><button id = "updateCancel">취소하기</button></div>
+  </div>
+
+
 
 
   <!-- 

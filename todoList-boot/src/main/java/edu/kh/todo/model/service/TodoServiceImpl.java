@@ -89,9 +89,9 @@ public class TodoServiceImpl implements TodoService {
 	
 	// 할 일 삭제
 	@Override
-	public int deleteTodo(int todoNo) {
+	public int todoDelete(int todoNo) {
 		
-		return mapper.deleteTodo(todoNo);
+		return mapper.todoDelete(todoNo);
 	}
 
 	
@@ -126,4 +126,24 @@ public class TodoServiceImpl implements TodoService {
 		
 		return mapper.getCompleteCount();
 	}
+	
+	
+	@Override
+	public List<Todo> selectList() {
+		
+		// selectList와 selectAll은 동일하므로 재활용
+		return mapper.selectAll();
+	}
+	
+	
+	@Override
+	public int deleteTodo(int todoNo) {
+	
+	return mapper.deleteTodo(todoNo);
+}
+	
+
+
+
+
 }

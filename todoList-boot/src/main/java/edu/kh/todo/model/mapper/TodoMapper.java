@@ -89,6 +89,14 @@ public interface TodoMapper {
 	 */
 	int getTotalCount();
 
+
+	int todoDelete();
+
+
+	int todoDelete(int todoNo);
+
+
+
 	
 
 

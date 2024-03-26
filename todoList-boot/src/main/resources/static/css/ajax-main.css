@@ -1,0 +1,134 @@
+#popupLayer{
+    width : 600px;
+    height : 450px;
+
+    border : 2px solid black;
+    background-color:white;
+
+    margin:auto;
+    position : fixed;
+
+    /* 브라우저 정가운데 배치 후 fixed */
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+
+    display:flex;
+    flex-direction: column;
+    
+    flex-grow : 1;
+    
+}
+
+
+.popup-row{
+    padding : 10px;
+    margin : 10px;
+    border-bottom : 1px solid grey;
+
+    /* 위치의 상대적 기준점 */
+    position : relative;
+}
+
+
+/* 팝업창을 숨김 */
+.popup-hidden{
+    display : none !important; /* 1순위!! */
+}
+
+
+#popupClose{
+    /* 위치를 절대적인 기준점으로 설정함 (기준 내 아무곳에나 배치) */
+    position:absolute;
+
+    top:0px;
+    right:10px; /* 오른쪽에서 10px 떨어진 위치 */
+    font-size:25px;
+    font-weight:bold;
+    user-select:none;
+}
+
+
+/* 위로 가져다 댔을 때 */
+#popupClose:hover{
+    
+   
+    cursor:pointer;
+
+}
+
+
+#popupClose:active{
+    color:grey;
+    font-size:22px;
+    cursor:auto;
+}
+
+/* 버튼영역 */
+.btn-container{
+    flex-grow:1; /* 중심축 방향으로 팽창 */
+    display:flex;
+    justify-content: flex-end;
+    align-items:flex-end;
+    margin : 10px;
+}
+
+.btn-container > button {
+
+    margin: 5px;
+    background-color: white;
+    border:2px solid green;
+    font-weight:bold;
+}
+
+
+.btn-container > button:hover{
+    cursor: pointer;
+    background-color: grey;
+}
+
+
+
+/* 수정 팝업 레이어 */
+#updateLayer{
+    width : 450px;
+    height: 350px;
+    border : 2px solid blue;
+    background-color : white;
+
+    position : fixed;
+
+    /* 브라우저 정가운데 배치 후 fixed */
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+
+    display:flex;
+    margin:auto;
+    flex-direction: column;
+    align-items : center;
+}
+
+
+
+
+#updateTitle{
+    width : 250px;
+}
+
+
+
+.popupLayerTitle{
+    flex-direction: column;
+    text-align:center;
+    font-size : 30px;
+    margin-top : 5px;
+}
+
+.updateLayerTitle{
+    font-size : 25px;
+    margin-top:20px;
+    
+}
