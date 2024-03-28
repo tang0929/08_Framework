@@ -16,4 +16,12 @@ public interface MemberMapper {
 	
 	public Member login(String memberEmail);
 
+	
+	/**
+	 * 회원 가입 SQL실행
+	 * @param inputMember
+	 * @return
+	 */
+	public int signup(Member inputMember);
+
 }

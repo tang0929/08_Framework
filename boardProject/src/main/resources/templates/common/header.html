@@ -4,6 +4,7 @@
       <a href="/">
         <img src="/images/logo.jpg" alt="메인 로고" id="homeLogo">
       </a>
+      <pre style="font-size : 35px;"><a href="/">   KH정보교육원</a></pre>
     </section>
   
     <!-- 검색어 입력할 수 있는 요소 배치 영역 -->
@@ -37,8 +38,46 @@
   
   
     <!-- 안쓰는 섹션 -->
-    <section></section>
+    <section>
+      
+
+    </section>
+
+    <!-- 우측 상단에 드롭다운 메뉴 -->
+    <div class="header-top-menu">
+
+      <!-- 로그인이 안되어있을 때 우측 상단 -->
+      <th:block th:if="${session.loginMember == null}">
+        <a href="/">메인 페이지</a>
+        ||
+        <a href="/member/login">로그인</a>
+        ||
+        <a href="/member/signup">회원가입</a>
+      </th:block>
   
+  
+      <!-- 로그인이 되어있을 때 우측 상단 -->
+      <th:block th:unless="${session.loginMember == null}">
+        <!-- headerMenuToggle이름을 가진 id와 연결시킴 -->
+        <label for="headerMenuToggle">
+
+          [[${session.loginMember.memberNickname}]]
+          
+          <!-- 아랫방향을 나타내는 기호 -->
+          <i class="fa-solid fa-caret-down"></i>
+        </label>
+  
+        <input type="checkbox" id="headerMenuToggle">
+  
+        <div class="header-menu">
+          <a href="#">내정보</a>
+          <a href="/member/logout">로그아웃</a>
+        </div>  
+  
+      </th:block>
+  
+    </div>
+
   
   </header>
   

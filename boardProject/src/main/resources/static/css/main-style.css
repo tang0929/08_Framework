@@ -22,10 +22,17 @@
     flex-grow: 1;       /* 중심축 방향으로 팽창 */
     min-height: 500px;
   }
+
+
+  /* a태그 스타일 수정 */
+  a{
+    text-decoration:none;
+    color : black;
+  }
   
   /* *********** header *********** */
   header{
-    height: 200px;
+    height: 140px;
     display: flex;
     flex-direction: row; /* 중심축 가로 방향(기본값) */
   }
@@ -158,7 +165,7 @@
   #loginForm{
     height: 150px;
     padding: 10px;
-    margin-top: 10px;
+    margin-top: 20px;
   
     display: flex;
     flex-direction: column;  /* 중심축을 컬럼(세로)로 지정 */
@@ -224,6 +231,41 @@
     background-color: var(--main-color);
   }
   
+
+
+/* 회원가입/찾기 */
+.signup-find-area{
+  margin-top : 15px;
+  padding-left:5px;
+
+}
+
+.signup-find-area >a{
+  font-size : 14px;
+}
+
+.signup-find-area >span{
+  padding: 0 10px;
+}
+
+
+
+
+/* 아이디 저장 */
+
+#loginForm > label{
+  margin-top: 4px;
+  font-size : 14px;
+  display:flex;
+  padding: 5px 0;
+}
+
+
+input[name="saveId"]{
+  margin-right :5px;
+}
+
+
   
   /* *********** footer ************ */
   footer {
@@ -254,3 +296,170 @@
     padding: 0 10px;
   }
   
+  /* ----------------------------로그인 성공 후 화면 ------------------------- */
+  .login-area{
+    height:120px;
+    padding:30px 10px;
+    margin:10px 0;
+    border : 1px solid black;
+    border-radius : 10px;
+
+    display:flex;
+    align-items : center;
+  }
+
+
+  /* 프로필 이미지 */
+
+  #memberProfile {
+    width : 64px;
+    height : 64px;
+    border-radius:50%; /* 원형태  */
+  }
+
+
+  /* 프로필 이미지를 감싸고 있는 a태그 */
+  .login-area > a {
+    display:block;
+    width:70px;
+    height:70px;
+    border : 3px solid #ddd;
+    border-radius:50%;
+  }
+
+
+
+  /* 닉네임, 이메일, 로그아웃 버튼 영역 */
+  .my-info{
+    width : 100%;
+    height: 100%;
+    margin-left : 20px;
+
+  }
+
+
+  .my-info > div{
+    display:flex;
+    justify-content:space-between; /* 양 끝으로 요소들을 붙임 */
+  }
+
+
+
+  #nickname {
+    font-size:20px;
+    font-weight:bold;
+    letter-spacing:-3px; /* 자간(글자간 간격)을 줄임 */
+  }
+
+
+  /* 로그아웃 버튼 */
+  #logoutBtn{
+    color : black;
+    font-size:15px;
+    font-weight:bold;
+    border : 2px solid grey;
+    padding : 3px 5px;
+  }
+
+
+
+  #logoutBtn:hover{
+    color:white;
+    background-color : grey;
+  }
+
+
+  #logoutBtn:active{
+    transform:scale(0.9);
+    transition-duration: 0.2s;
+  }
+
+
+
+
+  /* 이메일 */
+  .my-info > p{
+    margin: 0;
+    color : black;
+  }
+
+
+
+  /* header 우측 상단 메뉴 */
+
+  header{
+    position:relative; /* 기준점으로 설정 */
+  }
+
+  .header-top-menu{
+    position:absolute;
+    right:10px;
+    top:10px;
+  }
+
+  .header-top-menu *{
+    font-size:20px;
+    font-weight:bold;
+    font-family : "고딕체";
+  
+  }
+
+
+
+  /* header 메뉴의 체크박스 숨김처리 */
+  #headerMenuToggle {display : none;}
+
+
+  /* 닉네임 부분 */
+  label[for="headerMenuToggle"]{
+    cursor:pointer;
+    user-select:none;
+  }
+
+
+/* 마우스가 올라간 상황일때 밑줄 */
+  label[for="headerMenuToggle"]:hover{
+    text-decoration: underline;
+  }
+
+  /* 체크 박스 다음 형제 요소 (+는 다음 형제 요소를 뜻함 */
+  #headerMenuToggle + div{
+    display:none;
+  }
+
+
+/* 선택된 토글 다음 형제 요소 */
+  #headerMenuToggle:checked + div{
+    display:block;
+  }
+
+
+  /* 닉네임 클릭시 보이는 메뉴 */
+  .header-menu{
+    position : absolute;
+    width : 100px;
+    height : 80px;
+    right : 0;
+    margin-top : 5px;
+    border : 1px solid black;
+  }
+
+
+  /* 메뉴 안 글씨 가운데로 정렬시키기 */
+  .header-menu > a{
+    display : flex;
+    height : 50%;
+    justify-content: center;
+    align-items : center;
+  }
+
+/* 바뀌는 메뉴 사이에 희미한 선 긋기 */
+  .header-menu > a:first-of-type {
+    border-bottom: 1px solid #ccc;
+  }
+
+
+  .header-menu > a:hover{
+    color : white;
+    background-color: black;
+  }

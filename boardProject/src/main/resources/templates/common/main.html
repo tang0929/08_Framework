@@ -33,40 +33,71 @@
       <section class="content-2">
         <!-- 로그인, 회원가입 버튼 -->
 
-        <!-- 로그인 박스 -->
-        <form action="/member/login" method="POST" id="loginForm">
-          <fieldset class="id-pw-area">
+        
+        <!-- 로그인이 안되있을 때만 활성화 -->
+        <th:block th:if="${session.loginMember == null}">
+          <!-- 로그인 박스 -->
+          <form action="/member/login" method="POST" id="loginForm">
+            <fieldset class="id-pw-area">
+  
+              <!-- 아이디/비밀번호 입력 -->
+              <section>
+                <input type="text" 
+                       name="memberEmail"
+                       placeholder="이메일"
+                       id="memberEmail">
+  
+                <input type="password" 
+                       name="memberPw" 
+                       placeholder="비밀번호" id="memberPw">
+              </section>
+  
+              <!-- 로그인 버튼 -->
+              <section>
+                <button>로그인</button>
+              </section>
+            </fieldset>
+  
+            <label>
+              <!-- label 태그 : input 태그의 제목을 나타내는 태그  -->
+              <input type="checkbox" name="saveId">
+              아이디 저장
+            </label>
+  
+            <article class="signup-find-area">
+              <a href="/member/signup">회원가입</a>
+              <span> | </span>
+              <a href="#">ID/PW 찾기</a>
+            </article>
+  
+          </form>
+        </th:block>
 
-            <!-- 아이디/비밀번호 입력 -->
-            <section>
-              <input type="text" 
-                     name="memberEmail"
-                     placeholder="이메일">
+        <!-- 로그인 정보가 있을 때 -->
+<!--    <th:block th:unless="${session.loginMember = null}"></th:block> -->
+        <th:block th:if="${session.loginMember != null}">
+          
+        <article class="login-area">
 
-              <input type="password" 
-                     name="memberPw" 
-                     placeholder="비밀번호">
-            </section>
+          <a href="#" >
+            <!-- messages.properties에 작성된 기본 사용자 이미지를 사용 -->
+            <img th:src="#{user.default.image}" id="memberProfile" alt = "사진 없음">
+          </a>
 
-            <!-- 로그인 버튼 -->
-            <section>
-              <button>로그인</button>
-            </section>
-          </fieldset>
+          <!-- 로그인 후 닉네임, 이메일, 로그아웃 버튼 영역 사용 -->
+          <div class="my-info" th:object="${session.loginMember}">
+            <div><a href="#" id="nickname" th:text="*{memberNickname}">닉네임</a>
+                  <a href="/member/logout" id="logoutBtn">로그아웃</a></div>
+                
+                  <p th:text="*{memberEmail}">이메일</p> 
+            
 
-          <label>
-            <!-- label 태그 : input 태그의 제목을 나타내는 태그  -->
-            <input type="checkbox" name="saveId">
-            아이디 저장
-          </label>
 
-          <article class="signup-find-area">
-            <a href="#">회원가입</a>
-            <span> | </span>
-            <a href="#">ID/PW 찾기</a>
-          </article>
+          </div>
+        </article>
 
-        </form>
+
+        </th:block>
       </section>
 
     </section>
@@ -76,6 +107,6 @@
   <!-- common/footer.html 추가 -->
   <th:block th:replace="~{common/footer}"></th:block>
 
-
+<script src="/js/main.js"></script>
 </body>
 </html>
