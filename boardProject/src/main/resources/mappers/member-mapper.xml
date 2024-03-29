@@ -23,4 +23,25 @@ AND MEMBER_DEL_FL = 'N'
 <insert id="signup">
 INSERT INTO "MEMBER" VALUES(SEQ_MEMBER_NO.NEXTVAL,#{memberEmail},#{memberPw},#{memberNickname},#{memberTel},#{memberAddress},NULL,DEFAULT,DEFAULT,DEFAULT)
 </insert>
+
+
+
+<!-- 이메일 중복 검사 -->
+<!-- 탈퇴되지 않은(MEMBER_DEL_FL = 'N) 계정 중에서 입력한 이메일을 조건으로 조회되는 행의 개수(count)를 조회하게 될 때
+1이 반환되면 이미 존재한다는 뜻이므로 중복이라는 뜻이 됨. 0이 반환되면 없다는 뜻이므로 중복이 아니라는 뜻이 됨 -->
+<select id="checkEmail" resultType = '_int'>
+SELECT COUNT(*)
+FROM "MEMBER"
+WHERE MEMBER_DEL_FL = 'N'
+AND MEMBER_EMAIL = #{memberEmail}
+</select>
+
+
+<select id="checkNickname" resultType = '_int'>
+SELECT COUNT(*)
+FROM "MEMBER"
+WHERE MEMBER_DEL_FL = 'N'
+AND MEMBER_NICKNAME = #{memberNickname}
+</select>
+
 </mapper>

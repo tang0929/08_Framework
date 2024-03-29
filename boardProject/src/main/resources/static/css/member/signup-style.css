@@ -115,12 +115,14 @@
     transform:scale(0.95);
   }
 
-  #search:hover{
+  #searchAddress:hover{
     background-color:#455ba8;
     color:white;
   }
 
-  #search:active{
+  #searchAddress:active{
     transform: scale(0.95);
   }
+
+
 

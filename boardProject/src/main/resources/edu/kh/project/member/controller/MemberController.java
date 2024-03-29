@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -200,6 +201,30 @@ public class MemberController {
 	}
 	
 	
+	
+	/**
+	 * 이메일 중복 검사
+	 * 
+	 * @param memberEmail
+	 * @return : 중복이면 1, 아니면 0으로
+	 */
+	@ResponseBody // 응답 본문(요청한 fetch())로 돌려보냄
+	@GetMapping("checkEmail")
+	public int checkEmail(@RequestParam("memberEmail") String memberEmail) {
+		
+		return service.checkEmail(memberEmail);
+	}
+	
+	
+	/**
+	 * 닉네임 중복 검사
+	 */
+	@ResponseBody 
+	@GetMapping("checkNickname")
+	public int checkNickname(@RequestParam("memberNickname") String memberNickname) {
+		
+		return service.checkNickname(memberNickname);
+	}
 	
 }
 

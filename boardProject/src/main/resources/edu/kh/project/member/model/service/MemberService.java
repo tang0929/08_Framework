@@ -22,4 +22,22 @@ public interface MemberService {
 	 */
 	int signup(Member inputMember, String[] memberAddress);
 
+
+
+	/**
+	 * 이메일 중복 검사를 위한 0 혹은 1 반환
+	 * @param memberEmail
+	 * @return
+	 */
+	int checkEmail(String memberEmail);
+
+
+
+	/**
+	 * 닉네임 중복 검사 
+	 * @param memberNickname
+	 * @return
+	 */
+	int checkNickname(String memberNickname);
+
 }
