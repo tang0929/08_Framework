@@ -24,6 +24,12 @@
   }
 
 
+  /* 화면 너비가 1140px가 되기 전에 적용할 css */
+  @media (max-width : 1140px){
+    main{width : 100%;}
+  }
+
+
   /* a태그 스타일 수정 */
   a{
     text-decoration:none;
@@ -463,3 +469,6 @@ input[name="saveId"]{
     color : white;
     background-color: black;
   }
+
+  
+  

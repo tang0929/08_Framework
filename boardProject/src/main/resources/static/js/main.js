@@ -71,3 +71,84 @@ const getCookie = key => {
         })
 
     }
+
+
+
+    /* 빠른 로그인 */
+    const quickLoginBtns = document.querySelectorAll(".quick-Login");
+
+
+    // 배열에는 이벤트를 추가할 수 없다. (quickLoginBtns.addEventListener 사용 불가)
+    // 배열 요소를 하나씩 꺼내서 이벤트 리스너에 추가
+    quickLoginBtns.forEach((item,index) => {
+        // item : 현재 반복시 꺼내온 객체
+        // index : 현재 반복중인 인덱스
+
+        item.addEventListener("click", e =>{
+
+            const email = item.innerText; // 버튼에 작성된 이메일 얻어오기
+
+            location.href = "/member/quickLogin?memberEmail=" + email;
+
+        });
+
+    });
+
+
+    /* 회원 목록 조회 */
+
+    const selectMemberList = document.querySelector("#selectMemberList");
+
+    const memberList = document.querySelector("#memberList");
+
+
+    // td 요소를 만들고 text 추가 후 반환
+const createTd = (text) => {
+    const td = document.createElement("td");
+    td.innerText = text;
+    return td;
+  }
+
+    selectMemberList.addEventListener("click",() =>{
+        // 비동기로 회원 목록 조회 (포함되어야 하는 회원 정보 : 회원번호, 이메일, 닉네임, 탈퇴여부)
+        fetch("/member/selectMemberList")
+
+        // 첫번째 then(response => response.json())
+        /* JSON ARRAY -> JS 객체 배열로 변환 [{},{},{},{}] */
+        .then(response => response.json())
+        // 두번째 then
+        /* tbody에 이미 작성되어 있던 내용(이전에 조회한 목록) 삭제 후 조회된 JS 객체 배열을 이용해 tbody에 들어갈
+        요소를 만들고 값 세팅 후 추가*/
+
+        .then(list => {
+            console.log(list);
+
+            memberList.innerHTML = "";
+            
+              // tbody에 들어갈 요소를 만들고 값 세팅 후 추가
+            list.forEach( (member, index) => {
+            // member : 반복 접근한 요소(순서대로 하나씩 꺼낸 요소)
+            // index : 현재 접근 중인 index
+  
+            // tr 만들어서 그 안에 td 만들어서 append 후
+            // tr을 tbody에 append
+  
+            const keyList = ['memberNo', 'memberEmail', 'memberNickname', 'memberDelFl'];
+  
+            const tr = document.createElement("tr"); 
+  
+            // keyList에서 key를 하나씩 얻어온 후
+            // 해당 key에 맞는 member 객체 값을 얻어와
+            // 생성되는 td 요소에 innerText로 추가 후
+            // tr요소의 자식으로 추가
+            keyList.forEach( key => tr.append( createTd(member[key]) ) );
+        
+            // tbody 자식으로 tr 추가
+            memberList.append(tr);
+        })
+    });
+        
+
+
+
+    });

@@ -1,5 +1,7 @@
 package edu.kh.project.member.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -226,6 +228,44 @@ public class MemberController {
 		return service.checkNickname(memberNickname);
 	}
 	
+	
+	// location.href 는 GET 방식
+	/**
+	 * 빠른 로그인
+	 * @param memberEmail
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("quickLogin")
+	public String quickLogin(@RequestParam("memberEmail") String memberEmail, Model model, 
+			RedirectAttributes ra) {
+		
+		Member loginMember = service.quickLogin(memberEmail);
+		
+		
+		if(loginMember == null) {
+			ra.addFlashAttribute("message", "빠른 로그인을 할 계정이 존재하지 않습니다.");
+		} else {
+			model.addAttribute("loginMember",loginMember);
+		}
+		
+	
+		return "redirect:/";
+		
+	
+	}
+	
+	@ResponseBody
+	@GetMapping("selectMemberList")
+	public List<Member> selectMemberList(){
+		
+		return service.selectMemberList();
+		
+	}
+	
+	
+	
+	
 }
 
 
@@ -253,6 +293,8 @@ public class MemberController {
 			
 // ***********************************************************************
 			
+
+
 
 
 

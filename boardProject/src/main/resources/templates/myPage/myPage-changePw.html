@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 변경 페이지</title>
+
+    <!-- 전 페이지에 공통적으로 적용되는 header, footer 스타일 -->
+    <th:block th:replace="~{common/common}"></th:block>
+
+    <!-- myPage 전용 css -->
+    <link rel="stylesheet" href="/css/myPage/myPage-style.css">
+    </head>
+<body>
+
+    <!-- 공통 header 추가 -->
+    <main>
+        <th:block th:replace = "~{common/header}"></th:block>
+
+        <section class = "myPage-content">
+
+        <!-- sideMenu.html 추가 -->   
+        <th:block th:replace="~{myPage/sideMenu}"></th:block> 
+
+        <!-- myPage 본문 -->
+        <section class = "myPage-main">
+            <h1 class="myPage-title">비밀번호 변경</h1>
+            <span class="myPage-subject">현재 비밀번호를 새 비밀번호로 변경합니다.</span>
+            
+            
+        <form action="changePw" method="POST" name="myPageFrm" id="changePw">
+
+            <div class="myPage-row">
+                <label>현재 비밀번호</label>
+                <input type="password" name="currentPw" id="currentPw" maxlength="30" >              
+            </div>
+  
+            <div class="myPage-row">
+                <label>새 비밀번호</label>
+                <input type="password" name="newPw" id="newPw" maxlength="30">              
+            </div>
+  
+            <div class="myPage-row">
+                <label>새 비밀번호 확인</label>
+                <input type="password" name="newPwConfirm" id="newPwConfirm" maxlength="30">              
+            </div>
+  
+            <button class="myPage-submit">변경하기</button>
+  
+        </form>
+  
+
+
+
+
+        </section>
+
+        </section>
+    </main>
+
+    <!-- 공통 footer 추가 -->
+    <th:block th:replace = "~{common/footer}"></th:block>
+    
+</body>
+</html>

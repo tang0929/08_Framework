@@ -66,6 +66,11 @@ memberEmail.addEventListener("input",e => {
     const inputEmail = e.target.value; // 작성된 email을 변수로 선언하고 값을 얻어옴
 
 
+    // 이메일 인증을 성공하고 이메일이 변경된 경우
+    checkObj.authkey = false;
+    document.querySelector("#authKeyMessage").innerText = "";
+
+
     // 3. 공백을 제거하고 입력된 이메일이 없을 경우
     if(inputEmail.trim().length === 0){
         
@@ -158,7 +163,7 @@ const pwMessage = document.querySelector("#pwMessage");
 
 // 비밀번호, 비밀번호 확인이 같은지 검사하는 함수
 const checkPw = () => {
-    if(memberPw.value == memberPwConfirm.value){
+    if(memberPw.value === memberPwConfirm.value){
     // 비밀번호와 비밀번호 확인이 같게 입력된 경우
 
     pwMessage.innerText = "유효한 비밀번호가 서로 같게 입력되었습니다."
@@ -213,9 +218,9 @@ memberPw.addEventListener("input",e => {
     if(!regExp.test(inputPw)) {
         pwMessage.innerText = "비밀번호가 유효하지 않습니다.";
 
-        pwMessage.classList.add('error');
+        pwMessage.classList.add("error");
 
-        pwMessage.classList.remove('confirm');
+        pwMessage.classList.remove("confirm");
 
         checkObj.memberPw = false;
 
@@ -227,9 +232,9 @@ memberPw.addEventListener("input",e => {
 
     pwMessage.innerText = "유효한 비밀번호 형식입니다.";
 
-    pwMessage.classList.add('confirm');
+    pwMessage.classList.add("confirm");
 
-    pwMessage.classList.remove('error');
+    pwMessage.classList.remove("error");
 
     checkObj.memberPw = true;
 
@@ -255,7 +260,7 @@ memberPwConfirm.addEventListener("input", () => {
     }
     checkObj.memberPwConfirm = false;
     // memberPw가 유효하지 않게되면 위의 if문은 수행하지 않고 false
-})
+});
 
 
 
@@ -392,6 +397,7 @@ memberTel.addEventListener("input", e =>{
 const sendAuthKeyBtn = document.querySelector("#sendAuthKeyBtn"); // 인증번호 받기 버튼
 const authKey = document.querySelector("#authKey"); // 인증번호 입력칸
 const authKeyMessage = document.querySelector("#authKeyMessage"); // 인증번호 관련 메시지 출력 span
+const checkAuthKeyBtn = document.querySelector("#checkAuthKeyBtn");
 
 
 let authTimer; // 타이머 역할을 하는 setInterval을 저장할 변수
@@ -411,6 +417,8 @@ let sec = initSec;
 // 인증번호 받기 버튼 클릭
 sendAuthKeyBtn.addEventListener("click", () => {
 
+    checkObj.authKey = false;
+    document.querySelector("#authKeyMessage").innerText = "";
 
     // 인증번호 받기 동작이 허용되는 조건 : 중복되지않고 유효한 이메일을 입력한 경우
     // = checkObj가 true이어야만함
@@ -471,7 +479,7 @@ sendAuthKeyBtn.addEventListener("click", () => {
 
         // 0분 0초인 경우("00:00" 출력 후)
         if(min == 0 && sec == 0){
-            checkObj.authkey = false; // 시간 안에 인증을 못하게됨
+            checkObj.authKey = false; // 시간 안에 인증을 못하게됨
 
             clearInterval(authTimer); // 타이머를 종료시킴
 
@@ -528,6 +536,7 @@ signUpForm.addEventListener("submit", e => {
 
             switch(key){
                 case "memberEmail" : str = "이메일이 유효하지 않습니다."; break;
+                case "authKey" : str = "이메일이 인증되지 않았습니다."; break;
                 case "memberPw" : str = "비밀번호가 유효하지 않습니다."; break;
                 case "memberPwConfirm" : str = "비밀번호 확인이 유효하지 않습니다."; break;
                 case "memberNickname" : str = "닉네임이 유효하지 않습니다."; break;
@@ -548,3 +557,57 @@ signUpForm.addEventListener("submit", e => {
 
 
 
+// -----------------------------  이메일 인증하기 -------------------
+
+
+
+// 인증하기 버튼 클릭 후 비동기로 서버에 제출, 그 번호가 발급된 인증번호와 같은지 비교해서 같으면 1, 아니면 0 반환.
+// 단, 타이머가 0:00가 아닐 경우에만 수행
+checkAuthKeyBtn.addEventListener("click",() => {
+
+    // 타이머가 0:00(0분 0초이면) 끝
+    if (min === 0 && sec === 0){
+        alert("인증번호 입력 제한시간이 지났습니다.");
+        return;
+    }
+    // 6글자를 채우지 않고 인증하기 버튼을 눌렀을 때
+    if(authKey.value.length < 6){
+        alert("인증번호가 제대로 입력되지 않았습니다.");
+        return;
+    }
+        
+    // 입력받은 이메일과 인증번호를 저장하는 객체 생성
+        const obj = {"email":memberEmail.value,"authKey" : authKey.value};
+    
+        fetch("/email/checkAuthKey", {
+            method : "POST",
+            headers : {"Content-Type" : "application/json"},
+            body : JSON.stringify(obj)
+        })
+        .then(resp => resp.text())
+        .then(result => {
+            if (result === 0){ // == : 값만 비교 / === : 값+ 타입 둘다 비교
+                // 전달받은 result값이 0인경우 인증 실패
+                alert("인증번호가 일치하지 않습니다.");
+
+                checkObj.authKey = false;
+
+                return;
+            }
+
+                // 인증 성공
+                clearInterval(authTimer); // 타이머를 멈춤
+
+                alert("인증되었습니다.");
+
+                authKeyMessage.innerText = "인증되었습니다.";
+
+                authKeyMessage.classList.remove("error");
+
+                authKeyMessage.classList.add("confirm");
+
+                checkObj.authKey = true; // 유효성 검사 인증키 여부를 true로 변환
+        })
+
+    
+});
