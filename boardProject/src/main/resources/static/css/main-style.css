@@ -471,4 +471,18 @@ input[name="saveId"]{
   }
 
   
-  
+  #myPageBtn {
+    height:120px;
+    width:200px;
+    background-color: white;
+    font-size:24px;
+    border-radius:5%;
+  }
+
+  #myPageBtn:hover {
+    cursor : pointer;
+    background-color: black;
+    color:white;
+
+    
+  }

@@ -1,5 +1,7 @@
 package edu.kh.project.myPage.model.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.myPage.model.mapper.MyPageMapper;
@@ -62,7 +65,7 @@ public class MyPageServiceImpl implements MyPageService{
 	 * @param loginMember 
 	 */
 	@Override
-	public int changePw(int memberNo ,Map<String, Object> paramMap) {
+	public int changePw(Map<String, Object> paramMap, int memberNo) {
 		
 		
 		// 현재 로그인한 회원의 암호화된 비밀번호를 DB에서 조회
@@ -88,20 +91,80 @@ public class MyPageServiceImpl implements MyPageService{
 			
 			paramMap.put("encPw", encPw);
 			paramMap.put("memberNo", memberNo);
+			
 			return mapper.changePw(paramMap);
 			
 		}
 		
-		
-		
-		
-		 
+
 
 		
 	}
 	
 	
+
+	
+
+		
+		
+	
+	@Override
+	public int secession(String memberPw, int memberNo) {
+		
+		// 현재 로그인한 회원의 암호화된 비밀번호를 DB에서 조회
+		String inputPw = mapper.selectPw(memberNo);
+		if(!bcrypt.matches(memberPw,inputPw)) {
+			return 0;
+			
+		} else
+		
+		return mapper.secession(memberNo);
+	}
 	
 	
 	
-}
+	/**
+	 * 파일 업로드 테스트
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@Override
+	public String fileUpload1(MultipartFile uploadFile) throws IllegalStateException, IOException {
+		
+		
+		// MultipartFile이 제공하는 메서드
+		// - getSize() : 파일크기
+		// - isEmpty() : 업로드한 파일이 없으면 true
+		// - getOriginalFileName() : 원본 파일명
+		// - transferTo(경로) : 메모리 또는 임시 저장 경로에 업로드된 파일을 원하는 경로에 전송(서버 어떤 폴더에 지정하고 저장)
+		
+		
+		if(uploadFile.isEmpty()) {
+			
+			// 업로드한 파일이 없으면 아무것도 실행하지 않음
+			return null;
+			
+			
+		} 
+			// 업로드한 파일이 있을 경우 
+			// uploadfiles의 test의 (파일명) 으로 서버에 저장
+			uploadFile.transferTo(
+					new File("C:\\uploadFiles\\test\\" + uploadFile.getOriginalFilename()));
+			
+			// 웹에서 해당 파일에 접근할 수 있는 경로를 반환
+			
+			// 서버 : C:\\uploadFiles\\test\\a.jpg
+			// 웹 접근 주소 : /myPage/file/a.jpg
+		
+		
+		
+		return "/myPage/file/" + uploadFile.getOriginalFilename();
+	}
+	
+	
+	
+		
+	}
+	
+	
+	

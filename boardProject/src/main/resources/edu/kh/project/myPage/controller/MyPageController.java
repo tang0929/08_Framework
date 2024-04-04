@@ -1,5 +1,6 @@
 package edu.kh.project.myPage.controller;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -11,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.myPage.model.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 
+@SessionAttributes({"loginMember"})
 @Controller
 @RequestMapping("myPage")
 @RequiredArgsConstructor
@@ -156,18 +161,19 @@ public class MyPageController {
 		int memberNo = loginMember.getMemberNo();
 		
 		
-		
-		int result = service.changePw(memberNo,paramMap);
+		// 현재 비밀번호 +새로운 비밀번호+회원번호를 서비스로 전달
+		int result = service.changePw(paramMap,memberNo);
 		
 		String path = null;
 		String message = null;
 		
 		if (result > 0) {
-			message = "비밀번호가 변경되었습니다.";
 			path = "/myPage/info";
+			message = "비밀번호가 변경되었습니다.";
+			
 		} else {
 			message = "실패";
-			return "/myPage/changePw";
+			path = "/myPage/changePw";
 		}
 		ra.addFlashAttribute("message",message);
 		
@@ -175,12 +181,122 @@ public class MyPageController {
 		
 		
 		
-		
-		
+	}
 	
+	
+	// 비밀 번호를 입력받고, 비밀번호가 일치 + 약관 일치버튼을 클릭한 경우 해당 회원을 탈퇴(탈퇴 여부를 'Y'로 전환)
+	
+	/*
+	 * [컨트롤러]
+	 * - 파라미터 : 입력된 비밀번호
+	 * - Session : 로그인한 회원 정보 -> 회원 번호만 얻어오기 (누가 탈퇴하는지 지정하는 용도)
+	 * 
+	 * [서비스]
+	 * - 현재 로그인한 회원의 암호화된 비밀번호를 DB에서 조회를 함
+	 * - 입력된 비밀번호와 비교해서 일치할 경우, MEMBER_DEL_FL 값을 'Y'로 변경하는 MAPPER 호출 -> 수행 결과를 반환
+	 * - 불일치할 경우, return 0;
+	 * 
+	 * [컨트롤러]
+	 * - 결과에 따라서 탈퇴 성공하면 '회원탈퇴되었습니다.'하고 메인페이지로 redirect
+	 * - 회원 로그아웃시킴
+	 * - 실패하면(비밀번호가 불일치) '탈퇴 실패'하고 탈퇴 페이지로 redirect
+	 */
+	
+	
+	
+	/**
+	 * 회원 탈퇴
+	 * @param loginMember : memberNo를 가져오기 위한 용도
+	 * @param memberPw : 입력받은 비밀번호
+	 * @param ra : 메시지 전달용
+	 * @param status : 세션 완료시킴(없앰)
+	 * @return
+	 */
+	
+	// @SessionAttribute : Model에 세팅된 값 중 key가 일치하는 값을 request -> session으로 변경
+	// SessionStatus : @SessionAttributes를 이용해서 올라간 데이터의 상태를 관리하는 객체
+	//               -> 해당 컨트롤러에 @SessionAttributes({"key1","key2"})가 작성되어 있는 경우 () 내 key1, key2의 상태를 관리
+	
+	
+	@PostMapping("secession")
+	public String secession(@SessionAttribute("loginMember") Member loginMember,
+			@RequestParam("memberPw") String memberPw, RedirectAttributes ra, 
+			SessionStatus status) {
 		
+		int memberNo = loginMember.getMemberNo();
+		
+
+		
+		int result = service.secession(memberPw,loginMember.getMemberNo());
+		
+		String path = null;
+		String message = null;
+		
+		if(result > 0) {
+			
+			path = "/";
+			
+			message = "회원탈퇴 성공";
+			
+			status.setComplete();
+			
+		} else {
+			
+			path = "/myPage/secession";
+			
+			message = "탈퇴 실패";
+			
+		}
+		
+		ra.addFlashAttribute("message",message);
+		return "redirect:" + path;
 	}
 
+	
+	// 파일 업로드 테스트
+	
+	@GetMapping("fileTest")
+	public String fileTest() {
+		
+		
+		return "myPage/myPage-fileTest";
+		
+	/*
+	 * HTML에서 서버로 제출하는 데이터(파라미터)는 String 형태.
+	 */
+	}
+	
+	
+	
+	/*
+	 * Spring에서 파일 업로드를 처리하는 방법
+	 * 
+	 * - enctype = "multipart/form-data"로 클라이언트 요청을 받으면
+	 * 	(문자, 숫자, 파일 등이 섞여있는 요청)
+	 * 
+	 * 이를 MultipartResolver를 이용해서 섞여있는 파라미터를 분리
+	 * 
+	 * 문자열, 숫자 -> String
+	 * 파일 -> MultipartFile
+	 */
+	
+	
+	// 파일 업로드 테스트
+	@PostMapping("file/test1")
+	public String fileUpload1(
+			@RequestParam("uploadFile") MultipartFile uploadFile, RedirectAttributes ra) throws IllegalStateException, IOException {
+		
+		
+		// 실제로 업로드한 파일과 설정내용이 담겨있음
+		String path = service.fileUpload1(uploadFile);
+		
+		if(path != null) {
+			// 파일이 저장되어 웹에서 접근할 수 있는 경로가 반환되었을 경우
+			ra.addFlashAttribute("path",path);
+		}
+		
+		return "redirect:/myPage/fileTest";
+	}
 	
 	
 	

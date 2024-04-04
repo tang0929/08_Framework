@@ -152,3 +152,84 @@ const createTd = (text) => {
 
 
     });
+
+
+
+    // 특정 회원의 비밀번호 초기화 기능
+    const resetMemberNo = document.querySelector("#resetMemberNo");
+    const resetPw = document.querySelector("#resetPw");
+
+    resetPw.addEventListener("click",() => {
+
+        // 입력받은 회원번호 얻어오기
+        const inputNo = resetMemberNo.value;
+        // 입력한 회원번호가 없으면 못함
+        if(inputNo.trim().length == 0){
+            alert("회원번호를 먼저 입력해주세요");
+            return;
+        }
+
+
+
+        fetch("/resetPw",{
+            method : "PUT", // 수정 요청 방식
+            headers : {"Content-Type" : "application/json"},
+            body : inputNo
+
+        })
+        .then(resp => resp.text())
+        .then(result =>{
+            // result는 Controller에서 반환받은 값, 이를 Text로 파싱한 값
+
+
+            if(result > 0){
+                alert("비밀번호 초기화 성공");
+            }else {
+                // 입력한 회원번호가 없을경우
+                alert("초기화할 회원 번호가 존재하지 않습니다.");
+            }
+        });
+
+    });
+
+
+
+    // 특정 회원 탈퇴 복구
+    const resetMemberNo2 = document.querySelector("#resetMemberNo2");
+    const resetSecession = document.querySelector("#resetSecession");
+
+    resetSecession.addEventListener("click",() => {
+
+        // 입력된 회원번호를 얻어옴
+        const inputNo2 = resetMemberNo2.value;
+
+        // 입력된 회원번호가 없을경우
+        if(inputNo2.trim().length == 0){
+            alert("탈퇴 복구할 회원번호를 입력해주세요.");
+            return;
+        }
+
+        fetch("/resetSecession",{
+            method : "PUT",
+            headers : {"Content-Type" : "application/json"},
+            body : inputNo2
+        })
+        .then(resp => resp.text())
+        .then(result => {
+            
+            if(result > 0) {
+                alert("해당 회원의 탈퇴가 복구되었습니다.");
+            } else {
+                alert("탈퇴를 복구할 회원이 존재하지 않습니다.");
+            }
+
+        });
+    });
+
+
+    /* 로그인상태에서 마이페이지 버튼 활성화 */
+    const myPageBtn = document.querySelector("#myPageBtn");
+
+    myPageBtn.addEventListener("click",() => {
+        location.href ="/myPage/info"
+    })
