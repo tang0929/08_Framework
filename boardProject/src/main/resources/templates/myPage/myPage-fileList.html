@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>업로드한 파일 목록</title>
+
+    <!-- 전 페이지에 공통적으로 적용되는 header, footer 스타일 -->
+    <th:block th:replace="~{common/common}"></th:block>
+
+    <!-- myPage 전용 css -->
+    <link rel="stylesheet" href="/css/myPage/myPage-style.css">
+    </head>
+
+    <body>
+
+        <main>
+    <!-- 헤더 추가 -->
+    <th:block th:replace="~{common/header}"></th:block>
+
+    <section class="myPage-content">
+
+      <!-- 사이드 메뉴(왼쪽) 추가 -->
+      <th:block th:replace="~{myPage/sideMenu}"></th:block>
+
+      <!-- 마이페이지 본문(오른쪽) -->
+      <section class="myPage-main">
+
+        <h1 class="myPage-title">업로드 파일 목록</h1>
+
+
+        <!-- table로 업로드한 파일 목록 출력 -->
+        <table border = "1" style="border-collapse: collapse;">
+
+        <thead>
+          <tr>
+           <th>번호</th> 
+           <th>파일명</th> 
+           <th>게시자</th> 
+           <th>게시날짜</th> 
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="file : ${list}" th:object="${file}">
+            <td th:text="*{fileNo}">번호</td>
+            <td><a th:href="|*{filePath}*{fileRename}|" th:text="*{fileOriginalName}" th:download="*{fileOriginalName}" >파일명</a></td>
+            <td th:text="*{memberNickname}">게시자</td>
+            <td th:text="*{fileUploadDate}">게시날짜</td>
+          </tr>
+        </tbody>
+
+        </table>
+
+        
+
+
+
+      </section>
+
+    </section>
+    </main>
+
+    <!-- 공통 footer 추가 -->
+    <th:block th:replace = "~{common/footer}"></th:block>
+    
+    <script src = "/js/myPage/myPage.js"></script>
+</body>
+</html>

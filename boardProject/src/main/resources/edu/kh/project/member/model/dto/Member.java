@@ -1,5 +1,7 @@
 package edu.kh.project.member.model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +15,8 @@ import lombok.ToString;
 @Setter // 커맨드 객체 : 요청 시 전달받은 파라미터를 같은 이름의 필드에 세팅한 객체
 @NoArgsConstructor // 기본 생성자
 @ToString
+@Builder
+@AllArgsConstructor
 public class Member {
 
 	

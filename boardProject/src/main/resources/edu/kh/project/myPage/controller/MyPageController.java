@@ -1,6 +1,7 @@
 package edu.kh.project.myPage.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
+import edu.kh.project.myPage.model.dto.UploadFile;
 import edu.kh.project.myPage.model.service.MyPageService;
+import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 
 @SessionAttributes({"loginMember"})
@@ -300,5 +303,126 @@ public class MyPageController {
 	
 	
 	
+	/**
+	 * 파일 업로드 + DB
+	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@PostMapping("file/test2")
+	public String fileUpload2(@RequestParam("uploadFile") MultipartFile uploadFile, RedirectAttributes ra,
+			@SessionAttribute("loginMember") Member loginMember) throws IllegalStateException, IOException {
+		
+		
+		// 누가 업로드했는지 알기 위해 로그인한 회원의 번호를 가져옴.
+		int memberNo = loginMember.getMemberNo();
+		
+		
+		// 업로드한 파일 정보를 INSERT 후 결과 행의 개수를 반환할 예정
+		int result = service.fileUpload2(uploadFile, memberNo);
+		
+		
+		String message = null;
+		
+		
+		if(result > 0) {
+			// 업로드 성공시
+			message = "파일 업로드 성공";
+		} else {
+			
+			message = "파일 업로드 실패";
+		}
+		
+		ra.addFlashAttribute("message",message);
+		
+		
+		return "redirect:/myPage/fileTest";
+	}
+	
+	
+	
+	
+	
+	
+	@GetMapping("fileList")
+	public String fileList(Model model) {
+		
+		// 파일 목록 조회 서비스 호출
+		
+		List<UploadFile> list = service.fileList();
+		
+				
+		model.addAttribute("list", list);
+		
+				
+		return "myPage/myPage-fileList";
+		
+	}
+	
+	
+	/**
+	 * 여러 파일 한꺼번에 업로드
+	 * @param uploadFile2List
+	 * @param uploadFile3List
+	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@PostMapping("file/test3")
+	public String fileUpload3(@RequestParam("uploadFile2") List<MultipartFile> uploadFile2List,
+			@RequestParam("uploadFile3") List<MultipartFile> uploadFile3List,
+			@SessionAttribute("loginMember") Member loginMember,
+			RedirectAttributes ra) throws IllegalStateException, IOException	{
+		
+		
+		// uploadFile2 파일 미제출시, 해당 인덱스가 모두 비어있음
+		
+		// uploadFile3 파일 미제출시, 0번 인덱스 파일이 비어있음(List가 비어있는것은 아님)
+		
+		int memberNo = loginMember.getMemberNo();
+		
+		// result = 업로드된 파일 개수
+		int result = service.fileUpload3(uploadFile2List, uploadFile3List, memberNo);
+		
+		String message = null;
+		if(result == 0) {
+			
+			message = "업로드된 파일이 없습니다.";
+			
+		}else {
+			message = result + "개 파일이 업로드 되었습니다.";
+		}
+		ra.addFlashAttribute("message",message);
+		
+		return "redirect:/myPage/fileTest";
+	}
+	
+	
+	@PostMapping("profile")
+	public String profile(@RequestParam("profileImg") MultipartFile profileImg,
+			@SessionAttribute("loginMember") Member loginMember, 
+			RedirectAttributes ra) throws IllegalStateException, IOException	{
+		
+		int memberNo = loginMember.getMemberNo();
+		
+		
+		// 서비스 호출
+		// /myPage/profile/변경된이미지파일명 형태의 문자열을 현재 로그인한 회원의 PROFILE_IMG 컬럼 값으로 수정(UpDATE)
+		
+		int result = service.profile(profileImg, loginMember);
+		
+		
+		String message = null;
+		
+		if(result > 0)	{message = "프로필 이미지 변경 성공";
+		// 세션에 저장된 로그인 회원 정보에서 프로필 이미지를 업데이트
+		
+		
+		}
+		else message = "실패";
+		
+		ra.addFlashAttribute("message", message);
+		return "redirect:profile";
+	}
 	
 }

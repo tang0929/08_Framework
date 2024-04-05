@@ -31,7 +31,7 @@
 
         <pre>
 
-        [form태그의 encType 속성]      
+        [form태그의 enctype 속성]      
         * form 태그에서 지원하는 속성은 enctype에서 자동완성시킬 수 있음
 
 
@@ -60,7 +60,8 @@
         <form action="/myPage/file/test1" method="POST" name="myPageFrm" enctype="multipart/form-data">
 
           <input type="file" name="uploadFile">
-          <!-- type = "file"도 파라미터. @RequestParam으로 처리 가능 -->
+          <!-- type = "file"도 파라미터. @RequestParam으로 처리 가능
+          파일 업로드는 무조건 메소드 POST! -->
 
           <button class="myPage-submit">제출하기</button>
         </form>
@@ -72,6 +73,40 @@
         <a th:if="${path != null}"
         th:text="${path}"
         th:href="${path}" download>업로드한 파일</a>
+
+
+        <hr>
+        <br>
+
+        <form action="/myPage/file/test2" method="POST" enctype="multipart/form-data">
+          <h3>파일 업로드 + DB 저장 + 조회</h3>
+          
+          <input type="file" name="uploadFile">
+
+          <button class="myPage-submit">제출하기</button>
+        </form>
+        <hr>
+        <br>
+        <form action="/myPage/file/test3" method="POST" enctype="multipart/form-data">
+          <h3>여러파일 업로드</h3>
+
+          <pre>
+    1) 같은 name 속성을 가지는 type = "file" 요소를 여러개 작성
+    2) 파일 업로드 input란에 multiple 속성을 추가(업로드 창에서 여러 파일 한꺼번에 선택가능)
+          </pre>
+          <div>
+            1번 방법<br>
+          <input type="file" name="uploadFile2">
+          <input type="file" name="uploadFile2">
+          <input type="file" name="uploadFile2">
+          <input type="file" name="uploadFile2">
+          </div>
+          <div>
+            2번 방법<br>
+            <input type="file" name="uploadFile3" multiple>
+          </div>
+          <button class="myPage-submit">제출하기</button>
+        </form>
 
 
 
