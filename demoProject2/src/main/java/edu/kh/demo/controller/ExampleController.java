@@ -92,6 +92,7 @@ public class ExampleController {
 		// Model : 데이터 전달용 객체(request scope), Spring에서 값 전달 역할을 하는 객체.
 		//        기본적으로 request scope + session으로 확장 가능
 		
+	
 		model.addAttribute("str","<h1>테스트 중 &times;</h1>");
 		
 		

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+</head>
+<body>
+    <h1>고객 추가</h1>
+    <form action="/add/result" method="POST">
+    <div>
+        이름 : <input type="text" name = "customerName">
+    </div>
+    <div>
+        전화번호 : <input type="text" name = "customerTel" maxlength="11">
+    </div>
+    <div>
+        주소: <input type="text" name = "customerAddress">
+    </div>
+    <div>
+        <button>추가</button>
+    </div>
+    </form>
+</body>
+</html>
+
