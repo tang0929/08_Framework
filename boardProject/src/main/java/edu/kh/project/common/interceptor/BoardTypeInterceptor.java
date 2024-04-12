@@ -71,6 +71,8 @@ public class BoardTypeInterceptor implements HandlerInterceptor{
 		// application scope에 boardTypeList가 없을 경우
 		if(application.getAttribute("boardTypeList") == null) {
 			
+			log.info("BoardTypeInterceptor - postHandle(전처리) 동작 실행");
+			
 			// boardTypeList 조회 서비스 호출
 			List<Map<String, Object>> boardTypeList = service.selectBoardTypeList();
 			
