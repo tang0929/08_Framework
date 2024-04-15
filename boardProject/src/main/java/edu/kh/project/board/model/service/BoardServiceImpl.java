@@ -105,4 +105,90 @@ public class BoardServiceImpl implements BoardService{
 		
 		return mapper.selectOne(map);
 	}
+	
+	
+	
+	/**
+	 * 게시글 좋아요 체크/해제
+	 */
+	@Override
+	public int boardLike(Map<String, Integer> map) {
+	
+		int result = 0;
+		
+		
+		// 1. 좋아요가 체크된 상태일 경우(likeCheck == 1) 누르면 취소로 변경(BOARD_LIKE 테이블에 DELETE)
+		 
+		if(map.get("likeCheck") == 1) {
+			
+			// map.get("likeCheck")는 Integer 타입인데, 1은 int 타입인데도 불구하고 AutoUnboxing이 수행됨
+			
+			result = mapper.deleteBoardLike(map);
+			
+			
+		}
+		
+		
+		
+		// 2. 좋아요가 해제된 상태일 경우(likeCheck == 0) 누르면 체크 상태로 변경(BOARD_LIKE 테이블에 INSERT)
+		
+		else {
+			
+			result = mapper.insertBoardLike(map);
+		}
+		
+		
+		// 3. 해당 게시글의 좋아요 개수를 다시 조회해서 즉시 반환
+		
+		
+		if(result > 0) {
+			
+			// map에 있는 boardNo를 가지고 감
+			return mapper.selectLikeCount(map.get("boardNo"));
+		}
+		
+		// 좋아요 개수 관련 오류를 알아내기 위해 -1로 설정(확실히 구별하기)
+		return -1;
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 조회수의 기본 개념 생각하기
+	 * 
+	 * 1. 페이지를 조회할 때마다 증가(새로고침에 취약)
+	 * 2. DB에 누가 어떤 글을 조회했는가 일정 기간 단위로 확인해서 증가
+	 * 3. local/session 스토리지 이용(JS에서만 사용 가능)
+	 * 4. * 쿠키를 이용한 조회 수 증가 *
+	 * 5. In Memory DB (redis) 사용
+	 */
+	
+	
+	
+	
+	@Override
+	public int updateReadCount(int boardNo) {
+		
+		// 1. 조회 수 1 증가
+			int result = mapper.updateReadCount(boardNo);
+				
+			
+		// 2. 현재 조회 수 조회
+			if(result > 0) {
+				
+				return mapper.selectReadCount(boardNo);
+				
+			}
+				
+				return -1; // 실패한 경우 -1 반환
+	
+	}
+	
+	
 }

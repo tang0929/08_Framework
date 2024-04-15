@@ -15,15 +15,5 @@ public class CustomerServiceImpl implements CustomerService{
 	private CustomerMapper mapper;
 
 	
-	@Override
-	public int addCustomer(String customerName, String customerTel, String customerAddress) {
-
-
-		Customer customer = new Customer();
-		customer.setCustomerName(customerName);
-		customer.setCustomerTel(customerTel);
-		customer.setCustomerAddress(customerAddress);
-		
-		return mapper.addCustomer(customer);
-	}
+	
 }

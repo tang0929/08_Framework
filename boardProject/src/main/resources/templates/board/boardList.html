@@ -19,7 +19,7 @@
 
         <section class="board-list">
 
-            <h1 class="board-name" th:text="${boardName}">게시판 이름</h1>
+            
 
             <!-- 현재 무슨 게시판에 위치하고 있는지 표시 -->
             <!-- application, request scope 값 이용 방법 -->
@@ -79,16 +79,16 @@
                                 </td>
     
                                 <!-- 작성자 닉네임 -->
-                                <td th:text="*{memberNickname}"></td>
+                                <td th:text="*{memberNickname}">닉네임</td>
     
                                  <!-- 작성일 -->
-                                <td th:text="*{boardWriteDate}"></td>
+                                <td th:text="*{boardWriteDate}">2023-10-26</td>
     
                                 <!-- 조회수 -->
-                                <td th:text="*{readCount}"></td>
+                                <td th:text="*{readCount}">0</td>
     
                                 <!-- 좋아요 수 -->
-                                <td th:text="${likeCount}"></td>
+                                <td th:text="*{likeCount}">0</td>
     
                             </tr>
                         </th:block>

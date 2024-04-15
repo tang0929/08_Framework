@@ -1,5 +1,9 @@
 package edu.kh.project.board.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,13 +11,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.board.model.dto.Board;
 import edu.kh.project.board.model.dto.BoardImg;
 import edu.kh.project.board.model.service.BoardService;
+import edu.kh.project.member.model.dto.Member;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,12 +85,24 @@ public class BoardController {
 	 * @return
 	 * 
 	 * 상세 조회 요청 주소 ex) /board/1/1998?cp=1
+	 * @throws ParseException 
 	 */
 	@GetMapping("{boardCode:[0-9]+}/{boardNo:[0-9]+}")
 	public String boardDetail(
 			@PathVariable("boardCode") int boardCode,
-			@PathVariable("boardNo") int boardNo, Model model, RedirectAttributes ra) 
+			@PathVariable("boardNo") int boardNo, Model model, RedirectAttributes ra,
+			@SessionAttribute(value = "loginMember", required = false) Member loginMember,
+			HttpServletRequest req, // 요청에 담긴 쿠키를 얻어오기, 
+			HttpServletResponse resp) throws ParseException // 새로운 쿠키를 만들어 응답하) 
 	{	
+		
+		/*
+		 * @SessionAttribute(value = "loginMember", required = false)
+		 * 
+		 * @SessionAttribute : Session 에서 속성 값 얻어오기
+		 * loginMember를 key값으로 가져오지만, 필수적으로 요구하지 않아 오류 X (=로그인 안해도 게시글 상세조회는 가능)
+		 * 해당 속성이 없으면 null로 반환
+		 */
 		
 		// 게시글 상세 조회 서비스 호출
 		
@@ -89,12 +113,23 @@ public class BoardController {
 		map.put("boardNo", boardNo);
 		
 		
+		// 로그인 상태인 경우 memberNo도 추가
+		if(loginMember != null) {
+			map.put("memberNo", loginMember.getMemberNo());
+		}
+		
+		
+		
+		
 		
 		// 2. 서비스 호출
 		Board board = service.selectOne(map);
 		
 		
 		String path = null;
+		
+		
+		
 		if(board == null) { 
 			
 			// 조회 결과가 없으면 게시글 목록으로 다시 재요청
@@ -103,6 +138,115 @@ public class BoardController {
 			ra.addFlashAttribute("message", "게시글이 존재하지 않습니다.");
 			
 		} else {
+			
+			/* 쿠키를 이용한 조회수 증가 */
+			
+			// 1. 비회원 또는 로그인한 회원의 글이 아닌 경우(글쓴이를 뺀 다른 사람)
+			
+			
+			if (loginMember == null || loginMember.getMemberNo() != board.getMemberNo()) {
+				
+				
+				// 요청에 담겨있는 모든 쿠키 얻어오기
+				Cookie[] cookies = req.getCookies();
+				
+				
+				Cookie c = null; 
+				
+				
+				
+				for (Cookie temp : cookies) {
+					
+					// 요청에 댬긴 쿠키에 readBoardNo가 존재할 때
+					if(temp.getName().equals("readBoardNo")) {
+						
+						c = temp;
+						break;
+						
+					}
+				}
+				
+				
+				// readBoardNo가 요청받은 쿠키가 없을 때
+				int result = 0; // 조회수 증가 결과를 저장할 변수
+				
+				if(c == null) {
+					
+					// 새 쿠키 생성("readBoardNo", [게시글번호])
+					c = new Cookie("readBoardNo", "[" + boardNo + "]");
+					result = service.updateReadCount(boardNo);
+					
+					
+				
+					
+				} else // readBoardNo가 요청받은 쿠키가 존재할 때
+					
+					{	// ("readBoardNo", [2][30][400][2000])
+					
+					
+					// 현재 글을 처음 읽은 경우
+					
+					if(c.getValue().indexOf("[" + boardNo + "]") == -1){
+						
+						
+						c.setValue(c.getValue() + "[" + boardNo + "]");
+						
+						result = service.updateReadCount(boardNo);
+					}
+						
+					
+				}
+				
+				
+				// 조회수 증가 성공시
+				if( result > 0 ) {
+					
+					// 먼저 조회된 board의 readCount값을 result 값으로 반환
+					
+					board.setReadCount(result);
+					
+					
+					// 적용 경로 설정
+					c.setPath("/"); // "/" 이하 경로 요청 시 쿠키 서버로 전달
+
+					// 수명 지정
+					Calendar cal = Calendar.getInstance(); // 싱글톤 패턴
+					cal.add(cal.DATE, 1);
+
+					// 날짜 표기법 변경 객체 (DB의 TO_CHAR()와 비슷)
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+					// java.util.Date
+					Date a = new Date(); // 현재 시간
+
+					Date temp = new Date(cal.getTimeInMillis()); // 다음날 (24시간 후)
+					// 2024-04-15 12:30:10
+
+					Date b = sdf.parse(sdf.format(temp)); // 다음날 0시 0분 0초
+
+					// 다음날 0시 0분 0초 - 현재 시간
+					long diff = (b.getTime() - a.getTime()) / 1000;
+					// -> 다음날 0시 0분 0초까지 남은 시간을 초단위로 반환
+
+					c.setMaxAge((int) diff); // 수명 설정
+
+					resp.addCookie(c); // 응답 객체를 이용해서 클라이언트에게 전달
+					
+					
+					
+					
+					
+					
+					
+					
+				}
+			}
+			
+			
+			/* --------------------------------------------------*/
+			
+			
+			
 			
 			path = "board/boardDetail";
 			
@@ -141,11 +285,28 @@ public class BoardController {
 			}
 		}
 		
-		return "board/boardDetail";
+		return path;
 	}
+
 	
 	
 	
+	
+	
+	/**
+	 * 게시글 좋아요
+	 * @return result
+	 */
+	@ResponseBody
+	@PostMapping("like")
+	public int boardLike(
+			@RequestBody Map<String, Integer> map) {
+		
+		
+		
+		
+		return service.boardLike(map);
+	}
 	
 	
 	

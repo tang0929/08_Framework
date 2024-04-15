@@ -752,6 +752,11 @@ SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, BOARD_CODE, READ_COUNT,
 	 FROM "BOARD_IMG"
 	 WHERE BOARD_NO = 2006
 	 AND   IMG_ORDER = 0) THUMBNAIL
+	 
+	 (SELECT COUNT(*) 
+	 FROM BOARD_LIKE 
+	 WHERE MEMBER_NO = 21 
+	 AND BOARD_NO = 2006;) LIKE_COUNT
 
 FROM "BOARD"
 JOIN "MEMBER" USING(MEMBER_NO)
@@ -788,3 +793,18 @@ SELECT LEVEL, C.* FROM
    ORDER SIBLINGS BY COMMENT_NO;
 
 
+  
+------------------------------------------------------------------------
+  
+  
+  /* 좋아요 샘플데이터 */
+  
+  INSERT INTO BOARD_LIKE VALUES(21,2006);  -- 21번 회원이 2006번 게시글에 좋아요함
+  
+  COMMIT;
+ 
+ SELECT * FROM BOARD_LIKE;
+
+
+/* 좋아요 여부 확인(COUNT 값이 1이면 누른상태 아니면 0) */
+SELECT COUNT(*) FROM BOARD_LIKE WHERE MEMBER_NO = 21 AND BOARD_NO = 2006;

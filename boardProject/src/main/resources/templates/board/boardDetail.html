@@ -35,7 +35,7 @@
                     <!-- 프로필 이미지가 있을 경우 출력 (예정)-->
 
 
-
+ 
                     <span th:text="*{memberNickname}">작성자 닉네임</span>
 
                     
@@ -43,7 +43,7 @@
                     <span class="like-area">
                         <!-- 비동기로 좋아요 누를 때 동작 -->    
                         <!-- 좋아요 누른적이 있으면 fa-solid, 없으면 fa-regular 클래스 추가 -->
-                        <i class="fa-heart fa-regular" id="boardLike"></i>
+                        <i class="fa-heart fa-regular" id="boardLike" th:classappend="*{likeCheck == 1} ? fa-solid : fa-regular"></i>
 
                         <!-- 좋아요 개수 -->
                         <span th:text="*{likeCount}">0</span>
@@ -143,6 +143,29 @@
 
     <th:block th:replace="~{common/footer}"></th:block>
 
+    <script th:inline="javascript">
+
+
+        // 로그인 상태인 경우 로그인한 회원 번호를 전역변수로 저장
+        // loginMember가 null인 경우 null 반환.
+
+        const loginMemberNo = /*[[${session.loginMember?.memberNo}]]*/ "로그인 회원 번호";
+        // session에서 loginMember를 얻어온 값이 null이 아닌경우 회원 번호얻어오기
+
+
+        
+
+        /* 현재 게시글 번호를 전역 변수로 저장 */
+
+        const boardNo = /*[[${board.boardNo}]]*/ "게시글 번호";
+
+
+
+        /* 현재 게시글 좋아요 여부(boardLike)를 전역 변수로 저장*/
+        
+        let likeCheck = /*[[${board.likeCheck}]]*/ "좋아요 여부";
+
+    </script>
 
     <script src="/js/board/boardDetail.js"></script>
     <script src="/js/board/comment.js"></script>

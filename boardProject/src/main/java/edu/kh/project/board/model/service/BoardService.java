@@ -30,6 +30,31 @@ public interface BoardService {
 	 * @return board
 	 */
 	Board selectOne(Map<String, Integer> map);
+
+
+	
+	
+	/**
+	 * 게시글 좋아요 체크/해제
+	 * @param map(memberNo, boardNo, likeCheck)
+	 * @return result
+	 */
+	int boardLike(Map<String, Integer> map);
+
+
+	
+	/**
+	 * 조회 수 증가
+	 * @param boardNo
+	 * @return
+	 */
+	int updateReadCount(int boardNo);
+	
+	
+	
+	
+	
+	
 	
 	// {boardCode : 1, boardName : "공지게시판"}
 	// {boardCode : 2, boardName : "정보게시판"}	

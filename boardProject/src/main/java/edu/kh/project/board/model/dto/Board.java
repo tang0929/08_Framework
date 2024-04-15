@@ -59,5 +59,10 @@ public class Board {
 	
 	private List<Comment> commentList;
 	
+	
+	
+	// 좋아요 여부 확인
+	private int likeCheck;
+	
 
 }
