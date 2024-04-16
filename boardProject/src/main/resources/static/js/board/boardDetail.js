@@ -74,3 +74,26 @@ boardLike.addEventListener("click",e=>{
 
     });
 });
+
+
+/* 삭제 버튼 클릭시 게시글 삭제 */ 
+
+const deleteBtn = document.querySelector("#deleteBtn");
+
+deleteBtn.addEventListener("click", () => {
+
+    if(confirm("정말 삭제하시겠습니까?")){
+
+
+        location.href = "/editBoard/"+boardCode+"/"+boardNo+"/delete";
+
+
+
+        return;
+
+    } else {
+
+        alert("삭제 취소");
+        return;
+    }
+})

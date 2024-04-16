@@ -21,6 +21,7 @@ public class Board {
 	// BOARD 테이블 컬럼
 	
 	private int BoardNo;
+	
 	private String boardTitle;
 	private String boardContent;
 	private String boardWriteDate;

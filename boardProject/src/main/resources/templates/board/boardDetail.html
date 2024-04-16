@@ -125,7 +125,7 @@
                     객체가 null인지 판별해서 null이 아닌 경우에 수행-->
 
                     <button id="updateBtn">수정</button>
-                    <button id="deleteBtn">삭제</button>
+                    <button id="deleteBtn" name = "delete">삭제</button>
                     
                 </th:block>
 
@@ -158,6 +158,7 @@
         /* 현재 게시글 번호를 전역 변수로 저장 */
 
         const boardNo = /*[[${board.boardNo}]]*/ "게시글 번호";
+        const boardCode = /*[[${board.boardCode}]]*/ "게시판 번호";
 
 
 
