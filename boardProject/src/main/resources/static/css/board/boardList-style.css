@@ -74,6 +74,10 @@ a:hover {
     align-items: center;
 }
 
+.btn-area > button:hover{
+    background-color: #455ba8;
+    color : white;
+}
 
 .btn-area > button{
     margin-right: 50px;

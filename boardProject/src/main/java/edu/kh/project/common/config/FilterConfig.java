@@ -34,7 +34,7 @@ public class FilterConfig {
 		
 		
 		// myPage로 시작하는 모든 요청
-		String[] filteringUrl = {"/myPage/*"};
+		String[] filteringUrl = {"/myPage/*", "/editBoard/*"};
 		
 		
 		// 필터가 동작하는 URL들을 세팅

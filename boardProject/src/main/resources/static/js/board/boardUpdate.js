@@ -1,37 +1,29 @@
 
-/* 
-
-    querySelector(), querySelectorAll()
-    호출되었을 시점의 요소 형태를 그대로 얻어옴->실시간으로 추적 X
-
-    getElementsByClassName()는 요소를 얻어와 계속 추적 -> 실시간으로 변경/변경된 값 확인 가능
-*/
-
-
 /* 업로드 예정인 이미지들 미리보기 */
-const previewList = document.getElementsByClassName("preview");   // img태그 5개
+// const previewList = document.getElementsByClassName("preview");   // img태그 5개
 
 const inputImageList = document.getElementsByClassName("inputImage");  // input 태그 5개
 
 const deleteImageList = document.getElementsByClassName("delete-image");    // X 버튼 5개
 
 
+// x 버튼이 눌러져 삭제된 이미지 순서를 저장
+// 이미지 삭제를 한 인덱스 번호를 서버로 보내서 해당 이미지의 자리를 삭제함
+// Set : List와 달리 중복 저장 및 순서 유지가 없음
+// 하나의 삭제 버튼을 계속 누르면 최초 한 번만 번호를 출력하고 그 이상은 출력되지 않음
 
-/* input type = file의 특징
-1. 선택 후 취소하면 파일이 없어짐
-2. 최대 크기 설정한 수치를 초과시에도 파일이 남아있음
-3. value로 대입할 수 있는 값이 빈 칸("")밖에 없음 
-
-clone을 이용한 backup을 통해 해당 문제점들을 해결함 */
+const deleteOrder = new Set;
 
 
+
+
+// ------------------------------------ boardWrite 이미지 관련 JS 내용을 바탕으로 수정 --------------------------------------
 
 
 // 이미지 선택 이후 취소를 누를 경우를 대비한 backup 이미지
 
 /* 백업 원리 -> 복제품으로 기존 요소를 대체함 */
 const backupInputList = new Array(inputImageList.length);
-
 
 
 /* input 태그 값 변경 시 (파일 선택 시) 실행할 함수를 만듬 */
@@ -142,6 +134,12 @@ const changeImageFn = (inputImage, order) => {
 
         // 같은 순서 backupInputList에 input 태그를 복제해서 대입
         backupInputList[order] = inputImage.cloneNode(true);
+
+
+
+        // 이미지가 성공적으로 읽어진 경우(boardWrite에 있는 내용과 달리 추가해야할 부분)     
+        // deleteOrder에서 해당 순서 번째를 삭제
+        deleteOrder.delete(order);
     });
 
 
@@ -150,6 +148,7 @@ const changeImageFn = (inputImage, order) => {
 
 
 
+/* boardWrite에 있는 부분 그대로 가져옴 */
 
 // 이미지들을 하나하나 비교함
 for(let i = 0 ; i < inputImageList.length ; i++){
@@ -170,19 +169,36 @@ for(let i = 0 ; i < inputImageList.length ; i++){
         // img, input, backup의 인덱스가 모두 일치한다는 특징을 이용
 
 
+        // 미리보기 이미지가 있을 때에만
+        if(previewList[i].getAttribute("src") !== null && previewList[i].getAttribute("src") != ""){
+
+
+            // 기존에 존재하던 이미지가 있을 경우에만
+            if(orderList.includes(i)){
+            deleteOrder.add(i); // 삭제된 이미지 순서를 deleteOrder에 기록
+            }
+        } 
+
         previewList[i].src = ""; // 미리보기 이미지 삭제
         inputImageList[i].value = ""; // input에 선택된 이미지 삭제
-        backupInputList[i].value = ""; // 백업용 이미지 삭제
+        backupInputList[i] = undefined; // 백업용 이미지 삭제
+        
+
+       
     });
 }
 
+//------------------------------------------------------------------------------------------------------------
 
 
 
-/* 제목, 내용이 입력이 안되어있을 경우 제출 못하게 하는 유효성 검사 */
+
+// 수정 폼 제출 유효성 검사(내부 문장들은 글쓰기때의 유효성 검사랑 동일함)
+const boardUpdateFrm = document.querySelector("#boardUpdateFrm");
 
 
-document.querySelector("#boardWriteFrm").addEventListener("submit", e => {
+boardUpdateFrm.addEventListener("submit", e => {
+
 
     const boardTitle = document.querySelector("[name='boardTitle']");
     const boardContent = document.querySelector("[name='boardContent']");
@@ -214,17 +230,14 @@ document.querySelector("#boardWriteFrm").addEventListener("submit", e => {
 
         return;
     }
-})
 
 
+    // input 태그에 삭제할 이미지 순서(Set)를 배열 형태로 만든 후 대입
+    // -> value(문자열) 저장 시 배열은 toString()이 호출되어 양쪽 []가 사라짐 
+    document.querySelector("[name = 'deleteOrder'").value = Array.from(deleteOrder);
+
+    document.querySelector("[name = 'querystring'").value = location.search;
 
 
+});
 
-
-
-/* 삭제 버튼 클릭시
-1. 삭제하시겠습니까? 확인/취소
-2. 취소하면 취소되었습니다. 끝
-3. 확인하면 /editBoard/{boardCode}/{boardNo}/delete GET 방식요청 
-4. {boardCode} 게시판의 {boardNo} 글의 BOARD_DEL_FL 값을 Y로 변경 
-5. 변경 성공시 해당 게시판 목록 1page로 리다이렉트, 실패시 보고있던 페이지 그대로.*/

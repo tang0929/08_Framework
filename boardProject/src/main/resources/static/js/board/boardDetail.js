@@ -97,3 +97,64 @@ deleteBtn.addEventListener("click", () => {
         return;
     }
 })
+
+
+/* POST 방식은 form을 사용함
+
+POST 방식은 ajax 또한 사용할 수 있지만 비동기를 사용할 것이 아니므로 쓰지않음
+
+
+if(deleteBtn2 != null){
+  deleteBtn2.addEventListener("click", () => {
+
+    if( !confirm("삭제 하시겠습니까?") ) {
+      alert("취소됨")
+      return;
+    }
+
+    const url = location.pathname.replace("board","editBoard")  + "/delete"; 
+
+    // form태그 생성
+    const form = document.querySelector("form");
+    form.action = url;
+    form.method = "POST";
+
+    // cp값을 저장할 input 생성
+    const input = document.querySelector("input");
+    input.type = "hidden";
+    input.name = "cp";
+
+    // 쿼리스트링에서 원하는 파라미터 얻어오기
+    const params = new URLSearchParams(location.search)
+    const cp = params.get("cp");
+    input.value = cp;
+
+    form.append(input);
+
+    // 화면에 form태그를 추가한 후 제출하기
+    document.querySelector("body").append(form);
+    form.submit();
+  });
+}
+
+*/
+
+
+
+
+/* 게시글 수정버튼 동작 */
+/* 수정 버튼은 수정버튼이 활성화 되어있을때에만 사용 가능 */
+if(updateBtn != null){
+
+    const updateBtn = document.querySelector("#updateBtn");
+
+    updateBtn.addEventListener("click", () => {
+
+        // /editBoard/1/2010/update?cp=1 GET 방식 요청
+
+        // location 현재 경로인 /board/1/2010?cp=1에서 board를 editBoard로, 바꾼 url로 이동
+        location.href = location.pathname.replace('board','editBoard') + "/update" + location.search;
+    })
+
+}
+

@@ -30,5 +30,37 @@ public interface EditBoardMapper {
 	int boardDelete(Map<String, Integer> map);
 
 
+	/**
+	 * 게시글 부분(제목/내용) 수정
+	 * @param inputBoard
+	 * @return
+	 */
+	int boardUpdate(Board inputBoard);
+
+
+	/**
+	 * 게시글 이미지 삭제
+	 * @param map
+	 * @return
+	 */
+	int deleteImage(Map<String, Object> map);
+
+
+	/**
+	 * 게시글 이미지 수정
+	 * @param img
+	 * @return
+	 */
+	int updateImage(BoardImg img);
+
+
+	/**
+	 * 게시글 이미지 추가
+	 * @param img
+	 * @return
+	 */
+	int insertImage(BoardImg img);
+
+
 
 }
