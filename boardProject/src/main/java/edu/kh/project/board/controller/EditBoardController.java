@@ -298,7 +298,7 @@ public class EditBoardController {
 		
 		
 		
-		// 2. 게시글 수정 서비스 호출 후 겨로가 반환받기
+		// 2. 게시글 수정 서비스 호출 후 결과가 반환받기
 		
 		int result = service.boardUpdate(inputBoard,images,deleteOrder);
 		

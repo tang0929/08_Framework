@@ -158,3 +158,22 @@ if(updateBtn != null){
 
 }
 
+
+
+/* 목록으로 버튼을 클릭해서 게시판 목록으로 돌아가기 */
+const goToListBtn = document.querySelector("#goToListBtn");
+
+goToListBtn.addEventListener("click", () => {
+
+    
+  // 상세조회 : /board/1/2011?cp=1
+  // 목록     : /board/1?cp=1
+
+
+  let url = location.pathname;
+  url = url.substring(0, url.lastIndexOf("/"));
+
+  // 쿼리스트링
+  location.href = url + location.search;
+ 
+});

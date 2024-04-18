@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.test.customer.model.dto.Customer;
 import com.kh.test.customer.model.service.CustomerService;
 
 
@@ -32,29 +33,26 @@ public class CustomerController {
 	
 	
 	@PostMapping("result")
-	public String addCustomer(@RequestParam("customerName") String customerName,
-			@RequestParam("customerTel") String customerTel, 
-			@RequestParam("customerAddress") String customerAddress) {
+	public String addCustomer(Customer customer, Model model) {
 		
-		int result = service.addCustomer(customerName, customerTel, customerAddress);
+		int result = service.addCustomer(customer);
 		
 		
 		
 		
-		String path = null;
-		String message = null;
+	
 		
 		if(result > 0) {
 			
-			path ="add/result";
+			model.addAttribute("message","추가 성공");
 			
 	
 		} else {
 			
-		
-			return "redirect:/";
+			model.addAttribute("message", "추가 실패...");
+			return "result";
 		}
-		return path;
+		
 		
 		
 		

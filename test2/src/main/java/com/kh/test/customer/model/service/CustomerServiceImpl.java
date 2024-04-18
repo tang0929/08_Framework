@@ -13,6 +13,12 @@ public class CustomerServiceImpl implements CustomerService{
 	
 	@Autowired
 	private CustomerMapper mapper;
+	
+	@Override
+	public int addCustomer(Customer customer) {
+
+		return mapper.addCustomer(customer);
+	}
 
 	
 	
