@@ -191,4 +191,50 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	
+	
+	
+	/**
+	 * 검색 서비스 (+게시판 조회 재활용한 코드)
+	 */
+	@Override
+	public Map<String, Object> searchList(Map<String, Object> paramMap, int cp) {
+		
+		
+		
+		// 1. 지정된 게시판애서 검색 조건에 맞으면서 삭제되지 않은 게시글 수를 조회
+		int listCount = mapper.getSearchCount(paramMap);
+		
+		
+		
+		// 2. 1번의 결과 + cp 이용해서 Pagination 객체를 생성
+				Pagination pagination = new Pagination(cp, listCount);
+				
+				
+				
+	
+		// 3. 지정된 페이지의 검색 결과 목록 조회
+				
+				
+				int limit = pagination.getLimit();
+				int offset = (cp - 1) * limit;
+				RowBounds rowBounds = new RowBounds(offset, limit);
+				
+				
+				
+				List<Board> boardList = mapper.selectSearchList(paramMap, rowBounds);
+				
+				
+				
+				// 4. 목록 조회한 결과 + pagination객체르 Map으로 묶음
+				Map<String, Object> map = new HashMap<>();
+				
+				map.put("pagination", pagination);
+				map.put("boardList", boardList);
+				
+				//  5. 결과 반환
+				
+				return map;
+	}
+	
+	
 }
