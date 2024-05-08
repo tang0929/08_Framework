@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.member.model.service.MemberService;
@@ -240,6 +242,7 @@ public class MemberController {
 	public String quickLogin(@RequestParam("memberEmail") String memberEmail, Model model, 
 			RedirectAttributes ra) {
 		
+		try {
 		Member loginMember = service.quickLogin(memberEmail);
 		
 		
@@ -249,6 +252,14 @@ public class MemberController {
 			model.addAttribute("loginMember",loginMember);
 		}
 		
+		} catch(Exception e) {
+			// 매개변수 e : 발생된 예외 객체 기록
+			e.printStackTrace();
+			
+			model.addAttribute("e",e);
+			
+			return "error/500";
+		}
 	
 		return "redirect:/";
 		
@@ -264,6 +275,25 @@ public class MemberController {
 	}
 	
 	
+	
+	/* @ExceptionHandler(XXX.class)
+	/* 		-> MemberController 내부에서 발생되는 모든 XXXException을 잡아서 처리하는 메서드
+	 * 
+	 */
+	
+//	@ExceptionHandler(Exception.class)
+//	// 		-> MemberController 내부 모든 예외 처리 메서드
+//	public String memberExceptionHandler(Exception e, Model model) {
+//		
+//		// Model은 데이터를 전달하는 용도의 객체로 삼음
+//		e.printStackTrace(); // 콘솔에 예외를 출력
+//		
+//		model.addAttribute("e",e);
+//		
+//		return "error/500";
+//		
+//		
+//	}
 	
 	
 }
@@ -293,6 +323,25 @@ public class MemberController {
 			
 // ***********************************************************************
 			
+
+/*
+ * Spring 예외 처리 방법
+ * 
+ * 1. Method에서 직접 처리(try-catch, throws)
+ * 
+ * 
+ * 2. 컨트롤러 클래스에서 발생하는 예외를 모아서 처리 (클래스 단위)
+ * 
+ * 		(1) 컨트롤러 클래스에 예외처리를 위햔 메서드를 작성
+ * 		(2) 해당 메서드 위에 @ExceptionHandler 어노테이션 추가
+ * 
+ * 
+ * 3. 프로젝트에서 발생하는 예외를 모아서 처리
+ * 
+ * 		(1) 별도의 클래스 생성
+ * 		(2) 클래스 위에 @ControllerAdvice 어노테이션 추가
+ * 		(3) 클래스 내부에 @ExceptionHanlder가 추가된 메서드를 작성
+ */
 
 
 

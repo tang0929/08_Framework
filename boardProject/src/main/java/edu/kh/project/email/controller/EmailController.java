@@ -61,7 +61,7 @@ public class EmailController {
 
 		if(authKey != null) { // 인증번호가 반환돼서 돌아옴 (= 이메일이 성공적으로 보내짐)
 			
-			
+			 
 
 			 return 1;
 		}

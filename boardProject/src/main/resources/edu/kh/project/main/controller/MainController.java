@@ -1,11 +1,13 @@
 package edu.kh.project.main.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.service.annotation.PutExchange;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -68,6 +70,7 @@ public class MainController {
 		ra.addFlashAttribute("message","로그인 후 이용할 수 있는 페이지입니다.");
 		return "redirect:/";
 	}
+	
 	
 	
 	

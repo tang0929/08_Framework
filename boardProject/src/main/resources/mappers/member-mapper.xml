@@ -14,6 +14,7 @@ FROM "MEMBER"
 WHERE MEMBER_EMAIL = #{memberEmail}
 AND MEMBER_DEL_FL = 'N'
 
+
 </select>
 
 
@@ -21,7 +22,14 @@ AND MEMBER_DEL_FL = 'N'
 <!-- <parameterType = "member"> 생략 -->
 <!-- insert/update/delete 결과가 모두 행의 개수(int)이므로 resultType는 작성 X  -->
 <insert id="signup">
-INSERT INTO "MEMBER" VALUES(SEQ_MEMBER_NO.NEXTVAL,#{memberEmail},#{memberPw},#{memberNickname},#{memberTel},#{memberAddress},NULL,DEFAULT,DEFAULT,DEFAULT)
+INSERT INTO "MEMBER" VALUES(
+SEQ_MEMBER_NO.NEXTVAL,
+#{memberEmail},
+#{memberPw},
+#{memberNickname},
+#{memberTel},
+#{memberAddress},
+NULL,DEFAULT,DEFAULT,DEFAULT)
 </insert>
 
 
