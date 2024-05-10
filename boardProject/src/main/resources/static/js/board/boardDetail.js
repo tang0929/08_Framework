@@ -72,6 +72,14 @@ boardLike.addEventListener("click",e=>{
         // 7. 게시글 좋아요 개수 수정
         e.target.nextElementSibling.innerText = count;
 
+
+        // 8. 좋아요 취소하면 따로 알림 안보냄
+        if(likeCheck == 0) return;
+
+
+        // 웹소켓을 이용해서 알림 추가
+        sendNotificationFn("boardLike", location.pathname, boardNo);
+
     });
 });
 

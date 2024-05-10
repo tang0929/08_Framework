@@ -217,6 +217,9 @@ addContent.addEventListener("click", e =>{
     .then(response => response.text())
     .then(result => {
 
+
+        // result == 작성된 댓글 번호
+
         if(result > 0) {
             
             alert("댓글 등록 완료");
@@ -227,6 +230,10 @@ addContent.addEventListener("click", e =>{
 
             // 댓글 목록을 지웠다가 다시 조회해서 화면에 출력하는 함수인 selectCommentList() 호출
             selectCommentList();    
+
+
+            /* 글 작성자에게 댓글이 등록되었다는 알림 전달 + 알림 클릭시 해당 댓글이 작성된 위치로 이동 */
+            sendNotificationFn("insertComment", `${location.pathname}?cn=${result}`,boardNo);
         }
 
         else{
@@ -378,6 +385,9 @@ const insertChildComment = (parentCommentNo, btn) => {
 
             // 답글 달고 나면 commentContent 내용을 지움
             // commentContent.value = "";
+
+            // 답글을 달면 댓글 작성자에게 알림이 감
+            sendNotificationFn("insertComment", `${location.pathname}?cn=${result}`,boardNo);
 
 
             // 댓글 목록을 지웠다가 다시 조회해서 화면에 출력하는 함수인 selectCommentList() 호출

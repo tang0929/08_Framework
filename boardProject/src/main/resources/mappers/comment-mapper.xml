@@ -29,9 +29,16 @@ SELECT LEVEL, C.* FROM
 
 <!-- 댓글 / 자식댓글 추가  -->
 <!-- parentCommentNo가 0이 아니면 그대로 parentCommentNo를 출력하고 0이면 NULL처리함  -->
-<insert id = "insert">
-INSERT INTO "COMMENT" VALUES(SEQ_COMMENT_NO.NEXTVAL, #{commentContent}, DEFAULT, DEFAULT,
-#{boardNo},#{memberNo},
+<insert id = "insert" parameterType = "Comment" useGeneratedKeys = "true">
+
+<selectKey order = "BEFORE" resultType = "_int" keyProperty="commentNo">
+	SELECT SEQ_COMMENT_NO.NEXTVAL FROM DUAL
+</selectKey>
+
+
+
+	INSERT INTO "COMMENT" VALUES(#{commentNo}, #{commentContent}, DEFAULT, DEFAULT,
+	#{boardNo},#{memberNo},
 
 <if test = "parentCommentNo != 0">
 #{parentCommentNo}
