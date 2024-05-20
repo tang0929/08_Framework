@@ -437,7 +437,7 @@ targetInput.addEventListener("input", e => {   // input : 붙여넣기, 키보�
 				let email = member.memberEmail;
 
 				const span = document.createElement("span");
-				span.innerHTML = `${nickname} ${email}`.replace(query, `<mark>${query}</mark>`);
+				span.innerHTML = `${nickname} ${email}`.replace(query, `<mark>${query}</mark>`);  // 검색단어와 일치하는 일부분만큼을 노랗게 색칠하는 방법
 
 				// 요소 조립(화면에 추가)
 				li.append(img, span);
