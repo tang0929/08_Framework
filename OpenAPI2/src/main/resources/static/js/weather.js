@@ -1,5 +1,6 @@
 /* 서비스키(인증키) */
 const serviceKey = "UYby5Ax2DC7489LtFL15X9tRnaTCrXpWMJRESvSHZATw8rQG8nqxPlDHIrUb6clAZapqyEdohQjyLn6BimM6jg==";
+
 const numOfRows = 1000; // 조회할 데이터 개수
 const pageNo = 1; // 조회할 페이지
 const dataType = "JSON"; // 응답 데이터 타입(JSON/XML)
@@ -49,11 +50,6 @@ const getUltraSrtFcst = (regionValue) => {
   .then(result => {
 
     console.log(result);
-
-
-    // 위쪽 : 공공데이터 Open API를 이용한 데이터 요청 및 응답
-    // -------------------------------------------------------------------
-    // 아래쪽 : 개발자가 응답받은 데이터를 활용한 부분
 
 
     // 현재 시간으로 부터 가장 가까운 예보를 저장할 빈 객체를 생성

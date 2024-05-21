@@ -11,5 +11,4 @@ public class ApiController {
 	public String ex1() {
 		return "ex1";
 	}
-	
 }
